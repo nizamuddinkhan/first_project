@@ -1,0 +1,17 @@
+{
+  "name": "first_project",
+  "version": "0.0.1",
+  "description": "this is my new first project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:nizamuddinkhan/first_project.git"
+  },
+  "author": "nizam",
+  "dependencies": {
+    "gulp": "~3.9.1"
+  }
+}
