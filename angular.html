@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Angular file</title>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+</head>
+ 
+
+  <body ng-app="myApp" ng-controller="myCtrl">
+		<div >
+  			<p>Welcome Users:</p>
+  			<h1>{{content}}</h1>
+  		</div>
+          
+          <div>
+                <form>
+                     Username:
+                     <input type="text" ng-model="username" Placeholder="enter the username"> 
+                     
+                     Password:
+                     <input type="text" ng-model="password" Placeholder="enter the password">
+                     <input type="submit" ng-click="save()">
+     
+                                       
+                </form> 
+                       <h>{{formResponse}}</h>  
+                       <hr>
+                </div>
+            
+
+             <div>
+             	   <input type="text" ng-model="Uname" Placeholder="enter Uname">
+             	   <button ng-click="logout()">logout</button>
+             	   <br>
+             	   <h>{{logoutResponse}}</h>
+             	   <hr>
+
+             </div>
+
+            
+             <div>
+             	   <form>
+             	   	      <input type="text" ng-model="userID" Placeholder="enter userID">
+             	   	      
+             	   	      <button ng-click="DeleteUser()">DeleteUser</button>
+             	   	      
+             	   </form>
+             	   	      <h>{{removeResponse}}</h>
+             	   	      <hr>
+             
+             </div>
+
+            
+             
+             <div>
+             	   <form>
+             	   	      <input type="text" ng-model="Username" Placeholder="enter username">
+             	   	      
+             	   	      <input type="text" ng-model="answer" Placeholder=" enter ur answer">
+             	   	      
+             	   	      <button ng-click="passwordReset()">passwordReset</button>
+             	   	      
+             	   </form>
+             	           <h>{{resetResponse}}</h>
+                           <hr> 
+             </div>
+
+                  
+                   <div>
+                   	     <form>
+                   	           <input type="text" ng-model="password" Placeholder="Enter password">
+                   	     	    <input type="text" ng-model="id" Placeholder="Enter Id">
+                   	     	    <input type="text" ng-model="token" Placeholder="Enter Token">
+                   	     	    <button ng-click="updatePassword()">updatePassword</button>
+
+                   	     </form>
+                   	             <h>{{updateResponse}}</h>
+                   </div>
+
+                          
+
+
+  		<script>
+
+			var app = angular.module('myApp', []);
+			app.controller('myCtrl', function($scope, $http)
+			 {
+			 	 $http.defaults.headers.post['Content-Type'] = 'application/json;charset=utf8';
+    			
+    			$http.get("http://localhost:3000/users").then(function(response) 
+    			{
+        			$scope.content = response.data;
+   				 });
+
+                   
+                   //user login
+                  $scope.save=function()
+			     {
+			     	
+			     	$http({method:"POST",
+			     		   url:"http://localhost:3000/login",
+			     		   data:{
+			     		   	       username:$scope.username,
+			     		   	       password:$scope.password
+
+			     		   }
+				   		}).then(function(response)   	  
+			     	 		 {
+			     	  	   $scope.formResponse=response.data;
+			     	 	 })
+			     }
+
+			     
+			     //logout response
+			     $scope.logout=function()
+			     {
+			     	
+			     	$http({method:"GET",
+			     		   url:"http://localhost:3000/logout",
+			     		  
+				   		}).then(function(response)   	  
+			     	 		 {
+			     	  	   $scope.logoutResponse=response.data;
+			     	 	 })
+			     }
+
+			
+             
+             $scope.DeleteUser=function()
+			     {
+			     	
+			     	$http({method:"POST",
+			     		   url:"http://localhost:3000/users/delete",
+			     		   data:{
+			     		   	      id:$scope.userID
+			     		   }
+			     		  
+				   		}).then(function(response)   	  
+			     	 		 {
+			     	  	   $scope.removeResponse=response.data;
+			     	 	 })
+			     }
+            
+
+                $scope.passwordReset=function()
+			     {
+			     	
+			     	$http({method:"POST",
+			     		   url:"http://localhost:3000/users/passwordReset",
+			     		   data:{
+			     		   	      answer:$scope.answer,
+			     		   	      username:$scope.Username
+
+			     		   }
+			     		  
+				   		}).then(function(response)   	  
+			     	 		 {
+			     	  	   $scope.resetResponse=response.data;
+			     	 	 })
+			     }
+            
+              
+               $scope.updatePassword=function()
+			     {
+			     	
+			     	$http({method:"POST",
+			     		   url:"http://localhost:3000/users/updatepassword",
+			     		   data:{
+			     		   	      password:$scope.password,
+			     		   	      id:$scope.id,
+			     		   	      token:$scope.token
+
+			     		   }
+			     		  
+				   		}).then(function(response)   	  
+			     	 		 {
+			     	  	   $scope.updateResponse=response.data;
+			     	 	 })
+			     }
+            });    
+
+		</script>
+	</body>
+</html>
