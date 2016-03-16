@@ -1,14 +1,16 @@
 var session=require('express-session'),
  express=require('express'),
  app=express();
+ var router=express.Router();
 
 
+  
   userSession={};
   //exporting modules
- module.exports=function(app)
+ module.exports=function(router)
  {
- 	app.get('/',userSession.sessionCreate)
- 	app.get('/deletesession',userSession.sessionDelete)
+ 	router.get('/',userSession.sessionCreate)
+ 	router.get('/deletesession',userSession.sessionDelete)
  }
 
  //session
@@ -18,12 +20,12 @@ var session=require('express-session'),
  	if (req.session.data)
  	{
  		console.log(req.session.data)
- 		res.json("In Session")
+ 		res.redirect('/api/angular.html');
  		}
  			else
  		{
- 			res.json("Not in Session")
- 	}	
+ 			res.redirect('/api/angular.html');
+ 	}
  }
 
  // close session

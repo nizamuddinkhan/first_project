@@ -1,29 +1,30 @@
-var express=require("express");
-app=express();
+var express=require("express"),
+app=express(),
+router=express.Router(),
  mongoose = require("mongoose"),
  bodyParser = require("body-parser"),
  crypto=require("crypto"),
  uuid=require('uuid'), 
  UserPost=mongoose.model("UserPost"),
- commentPost=mongoose.model("commentPost");
+ commentPost=mongoose.model("commentPost"),
  User=mongoose.model("user");
 
  profile=mongoose.model("profile");//call profile model from usersprofile
   
 var userMethods = {};
 
- 
+  
 
-module.exports = function(app){
+module.exports = function(router){
 
 
-  app.post('/user',userMethods.create);
-  app.get('/users',userMethods.show);
-  app.post('/login',userMethods.login);
-  app.post("/users/passwordreset",userMethods.passwordReset);
-  app.post("/users/updatepassword",userMethods.updatePassword);
-  app.post("/users/delete",userMethods.removeUser);
-  app.get("/logout",userMethods.logout);
+  router.post('/user',userMethods.create);
+  router.get('/users',userMethods.show);
+  router.post('/login',userMethods.login);
+  router.post("/users/passwordreset",userMethods.passwordReset);
+  router.post("/users/updatepassword",userMethods.updatePassword);
+  router.post("/users/delete",userMethods.removeUser);
+  router.get("/logout",userMethods.logout);
 
   //app.post('/users/forgot_password',userMethods.forgot_password)
 }
@@ -52,22 +53,27 @@ module.exports = function(app){
 
       });
          //new profile for user
-        var newprofile=new profile({
+        
+
+           console.log(newUser)
+
+     newUser.save(function(err,data)
+       {
+
+        var newprofile=new profile
+        ({
           userID:newUser._id
         })
             
-          newprofile.save(function(err,data)
+        newprofile.save(function(err,data)
 
-          {
-            console.log("newUserid is saved")
-          })
-
-           console.log(newUser)
-     newUser.save(function(err,data)
-       {
-        console.log("hello");
-
+        {
+          console.log("newUserid is saved")
           res.status(800).send(data);
+        })
+        
+
+          
       });
 
 };
@@ -126,11 +132,11 @@ var userPassword=req.body.password;
                            console.log("data.hashedPassword",data.hashedPassword);
            
                          if (data.hashedPassword != userHash) {
-                           res.send(200,"u r unlogged");
+                              res.send(200,"Wrong password");
                            }
                            else
                            {
-                             res.send(200,"u r login")
+                             res.send(200,data)
                            }
                          } 
                        })

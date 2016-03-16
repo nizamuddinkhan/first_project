@@ -1,4 +1,5 @@
-var app = require("express")(),
+var express = require("express"),
+ app = express();
 mongoose=require("mongoose"),
 bodyParser=require("body-parser"),
 session=require('express-session'),
@@ -31,14 +32,19 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 
 app.use(expressValidator());
+
+var router = express.Router();
   
 
 //readdring hmtl file
-app.get("/angular.html",function(req,res)
+router.get("/angular.html",function(req,res)
 {
     res.sendFile(__dirname+("/angular.html"));
 })
-
+router.get("/home.html",function(req,res)
+{
+    res.sendFile(__dirname+("/home.html"));
+})
 
 
 fs.readdirSync(__dirname+"/models").forEach(function(filename){
@@ -50,8 +56,10 @@ fs.readdirSync(__dirname+"/models").forEach(function(filename){
 fs.readdirSync(__dirname+"/controllers").forEach(function(filename){
 	console.log(filename);
      if (filename.indexOf('.js'))
-     	require(__dirname+"/controllers/"+filename)(app);
+     	require(__dirname+"/controllers/"+filename)(router);
 });
+
+app.use("/api",router);
 
 
 

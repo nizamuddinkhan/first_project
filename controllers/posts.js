@@ -1,5 +1,6 @@
 var express=require("express"),
 app=express(),
+ router=express.Router(),
  mongoose = require("mongoose"),
  bodyParser = require("body-parser"),
  profile=mongoose.model("profile"),
@@ -8,16 +9,16 @@ app=express(),
   
   var userPost= {};
 
- 
-  module.exports = function(app){
+  
+  module.exports = function(router){
 
 
-         app.post('/post',userPost.upPost);
-         app.post('/postLike',userPost.PLike);
-         app.get('/showpost',userPost.SPost);
-         app.post('/postcomment',userPost.UComment);
-         app.get('/showcomment',userPost.SComment);
-         app.post('/commentLike',userPost.CLike);
+         router.post('/post',userPost.upPost);
+         router.post('/postLike',userPost.PLike);
+         router.get('/showpost',userPost.SPost);
+         router.post('/postcomment',userPost.UComment);
+         router.get('/showcomment',userPost.SComment);
+         router.post('/commentLike',userPost.CLike);
 
      }
 

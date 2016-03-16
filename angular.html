@@ -2,35 +2,75 @@
 <html>
 <head>
 <title>Angular file</title>
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-cookies.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>.
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    
+    <style>
+        .navbar { border-radius:0; }
+    </style>
+
 </head>
  
 
   <body ng-app="myApp" ng-controller="myCtrl">
+  
+
+             <!-- NAVIGATION -->
+        <nav class="navbar navbar-inverse" role="navigation">
+             <div class="navbar-header">
+                 <a class="navbar-brand" ui-sref="#">Networking Site</a>
+             </div>
+             <ul class="nav navbar-nav">
+                <li><a ui-sref="home">Home</a></li>
+                <li><a ui-sref="about">About</a></li>
+             </ul>
+       </nav>
+   
+    <!-- partial-home.html -->
+  <div class="jumbotron text-center">
+       <h1><i>This Is Homey Page</i></h1>
+       <br>
+       <h1>WELCOME</h1>
+       <p>This page demonstrates<span class="text-danger">nested</span>views</p> 
+       <!-- MAIN CONTENT -->
+            <div class="container">
+                <div ui-view></div>
+            </div>    
+  </div>
+
+
+
 		<div >
-  			<p>Welcome Users:</p>
-  			<h1>{{content}}</h1>
+  			<p><b><mark>Users</mark></b>:</p>
+  			<h>{{content}}</h> <!-- //users data -->
   		</div>
           
           <div>
                 <form>
-                     Username:
-                     <input type="text" ng-model="username" Placeholder="enter the username"> 
+                     <h><b><b>Login</b></b>.</h>
+                     <br>
+                     <b>Username</b>:
+                    <input type="text" ng-model="username" Placeholder="enter the username"> 
                      
-                     Password:
-                     <input type="text" ng-model="password" Placeholder="enter the password">
+                     <b>Password</b>:
+                     <input type="text" ng-model="Password" Placeholder="enter the password">
+                     
                      <input type="submit" ng-click="save()">
+
      
                                        
                 </form> 
-                       <h>{{formResponse}}</h>  
-                       <hr>
+                               <!--<h>{{formResponse.username}}</h>   -->                       <h>{{formResponse}}</h>   
+                         <hr>
                 </div>
             
+               
 
              <div>
              	   <input type="text" ng-model="Uname" Placeholder="enter Uname">
-             	   <button ng-click="logout()">logout</button>
+             	   <button ng-click="logout()"><b>logout</b>.</button>
              	   <br>
              	   <h>{{logoutResponse}}</h>
              	   <hr>
@@ -42,7 +82,7 @@
              	   <form>
              	   	      <input type="text" ng-model="userID" Placeholder="enter userID">
              	   	      
-             	   	      <button ng-click="DeleteUser()">DeleteUser</button>
+             	   	      <button ng-click="DeleteUser()"><b>DeleteUser</b>.</button>
              	   	      
              	   </form>
              	   	      <h>{{removeResponse}}</h>
@@ -54,11 +94,13 @@
              
              <div>
              	   <form>
+             	           <b>passwordReset</b>:
+             	           <br>
              	   	      <input type="text" ng-model="Username" Placeholder="enter username">
              	   	      
              	   	      <input type="text" ng-model="answer" Placeholder=" enter ur answer">
              	   	      
-             	   	      <button ng-click="passwordReset()">passwordReset</button>
+             	   	      <button ng-click="passwordReset()"><b>GetToken</b>.</button>
              	   	      
              	   </form>
              	           <h>{{resetResponse}}</h>
@@ -68,10 +110,10 @@
                   
                    <div>
                    	     <form>
-                   	           <input type="text" ng-model="password" Placeholder="Enter password">
+                   	           <input type="text" ng-model="password" Placeholder="Enter New password">
                    	     	    <input type="text" ng-model="id" Placeholder="Enter Id">
                    	     	    <input type="text" ng-model="token" Placeholder="Enter Token">
-                   	     	    <button ng-click="updatePassword()">updatePassword</button>
+                   	     	    <button ng-click="updatePassword()"><b>updatePassword</b>.</button>
 
                    	     </form>
                    	             <h>{{updateResponse}}</h>
@@ -82,12 +124,12 @@
 
   		<script>
 
-			var app = angular.module('myApp', []);
-			app.controller('myCtrl', function($scope, $http)
+			var app = angular.module('myApp', ['ngCookies','ui.router']);
+			app.controller('myCtrl', function($scope, $http,$cookieStore)
 			 {
 			 	 $http.defaults.headers.post['Content-Type'] = 'application/json;charset=utf8';
     			
-    			$http.get("http://localhost:3000/users").then(function(response) 
+    			$http.get("http://localhost:3000/api/users").then(function(response) 
     			{
         			$scope.content = response.data;
    				 });
@@ -98,15 +140,25 @@
 			     {
 			     	
 			     	$http({method:"POST",
-			     		   url:"http://localhost:3000/login",
+			     		   url:"http://localhost:3000/api/login",
 			     		   data:{
 			     		   	       username:$scope.username,
-			     		   	       password:$scope.password
+			     		   	       password:$scope.Password
 
 			     		   }
 				   		}).then(function(response)   	  
 			     	 		 {
-			     	  	   $scope.formResponse=response.data;
+
+			     	 		 	if(response.data)
+			     	 		 	{
+			     	 		 	 $scope.formResponse=response.data;
+			     	 		 	 $cookieStore.put("data",response.data)
+			     	 		 	}
+			     	  	   else
+			     	  	   	{
+			     	  	   		$scope.formResponse=response.data;
+			     	  	   	}
+
 			     	 	 })
 			     }
 
@@ -116,13 +168,15 @@
 			     {
 			     	
 			     	$http({method:"GET",
-			     		   url:"http://localhost:3000/logout",
+			     		   url:"http://localhost:3000/api/logout",
 			     		  
 				   		}).then(function(response)   	  
 			     	 		 {
 			     	  	   $scope.logoutResponse=response.data;
-			     	 	 })
-			     }
+			     	  	   $cookieStore.remove("data");
+
+			     	 	 });
+			     };
 
 			
              
@@ -130,7 +184,7 @@
 			     {
 			     	
 			     	$http({method:"POST",
-			     		   url:"http://localhost:3000/users/delete",
+			     		   url:"http://localhost:3000/api/users/delete",
 			     		   data:{
 			     		   	      id:$scope.userID
 			     		   }
@@ -146,7 +200,7 @@
 			     {
 			     	
 			     	$http({method:"POST",
-			     		   url:"http://localhost:3000/users/passwordReset",
+			     		   url:"http://localhost:3000/api/users/passwordReset",
 			     		   data:{
 			     		   	      answer:$scope.answer,
 			     		   	      username:$scope.Username
@@ -164,7 +218,7 @@
 			     {
 			     	
 			     	$http({method:"POST",
-			     		   url:"http://localhost:3000/users/updatepassword",
+			     		   url:"http://localhost:3000/api/users/updatepassword",
 			     		   data:{
 			     		   	      password:$scope.password,
 			     		   	      id:$scope.id,
@@ -177,7 +231,31 @@
 			     	  	   $scope.updateResponse=response.data;
 			     	 	 })
 			     }
-            });    
+            });  
+     app.config(function($stateProvider, $urlRouterProvider) {
+    
+    $urlRouterProvider.otherwise('/');
+    
+    $stateProvider
+        
+        // HOME STATES AND NESTED VIEWS ========================================
+        .state('home', {
+            url: '/home',
+            templateUrl: "home.html"
+        })
+        
+       
+        .state('about', {
+            template:"nothing to show"       
+        })
+        .state('#', {
+            url: '/',
+            template: "This is main page"
+        });
+        
+        
+});
+  
 
 		</script>
 	</body>

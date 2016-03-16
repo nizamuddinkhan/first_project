@@ -3,14 +3,16 @@ app=express(),
  mongoose = require("mongoose"),
  bodyParser = require("body-parser"),
  profile=mongoose.model("profile");
- 
+ var router=express.Router();
+
+   
 
  var profileMethods = {};
 
- module.exports = function(app){
+ module.exports = function(router){
 
- app.post("/users/profileUpdate",profileMethods.profileUpdate);	
- app.get("/user/profile" ,profileMethods.show);
+ router.post("/users/profileUpdate",profileMethods.profileUpdate);	
+ router.get("/user/profile" ,profileMethods.show);
 }
    
     //midleware
@@ -51,7 +53,7 @@ profileMethods.profileUpdate=function(req,res)
 						}).exec(function(err,data)
 				        	{
 				        		console.log("data saved")
-				        		res.status(200).json("data",data);
+				        		res.status(200).json(data);
 				        	})
 				}
         
